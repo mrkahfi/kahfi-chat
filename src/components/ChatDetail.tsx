@@ -11,7 +11,12 @@ interface ChatDetailProps {
   isMobile: boolean;
 }
 
-export function ChatDetail({ chat, messages, onBack, isMobile }: ChatDetailProps) {
+export function ChatDetail({
+  chat,
+  messages,
+  onBack,
+  isMobile,
+}: ChatDetailProps) {
   const handleSendMessage = (message: string) => {
     console.log('Sending message:', message);
   };

@@ -7,9 +7,12 @@ interface ChatListProps {
   onChatSelect?: (chatId: string) => void;
 }
 
-export function ChatList({ chats, selectedChatId, onChatSelect }: ChatListProps) {
-
-  const navigate = useNavigate()
+export function ChatList({
+  chats,
+  selectedChatId,
+  onChatSelect,
+}: ChatListProps) {
+  const navigate = useNavigate();
 
   const handleChatClick = (chatId: string) => {
     if (onChatSelect) {
@@ -45,7 +48,9 @@ export function ChatList({ chats, selectedChatId, onChatSelect }: ChatListProps)
                 </h3>
                 <span className="text-xs text-gray-500">{chat.timestamp}</span>
               </div>
-              <p className="text-sm text-gray-500 truncate">{chat.lastMessage}</p>
+              <p className="text-sm text-gray-500 truncate">
+                {chat.lastMessage}
+              </p>
             </div>
           </button>
         ))}

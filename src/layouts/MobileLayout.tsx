@@ -1,16 +1,16 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React from 'react';
+import { useLocation } from 'react-router-dom';
 
 interface MobileLayoutProps {
-    children: React.ReactNode
+  children: React.ReactNode;
 }
 
-function MobileLayout({children}: MobileLayoutProps) {
-    const location = useLocation();
-    const isDetail = location.pathname.includes('/chat');
+function MobileLayout({ children }: MobileLayoutProps) {
+  const location = useLocation();
+  const isDetail = location.pathname.includes('/chat');
 
-    return (
-        <div className="h-screen w-screen relative overflow-hidden bg-white">
+  return (
+    <div className="h-screen w-screen relative overflow-hidden bg-white">
       <div
         className={`absolute inset-0 transition-transform duration-300 ease-in-out transform
           ${isDetail ? '-translate-x-full' : 'translate-x-0'}`}
@@ -24,7 +24,7 @@ function MobileLayout({children}: MobileLayoutProps) {
         {isDetail && children}
       </div>
     </div>
-    )
+  );
 }
 
 export default MobileLayout;

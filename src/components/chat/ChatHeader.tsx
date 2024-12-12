@@ -11,10 +11,7 @@ export function ChatHeader({ chat, onBack, isMobile }: ChatHeaderProps) {
   return (
     <div className="p-4 bg-gray-50 border-b flex items-center space-x-4">
       {isMobile && (
-        <button
-          onClick={onBack}
-          className="p-1 hover:bg-gray-200 rounded-full"
-        >
+        <button onClick={onBack} className="p-1 hover:bg-gray-200 rounded-full">
           <ArrowLeft className="w-6 h-6" />
         </button>
       )}
