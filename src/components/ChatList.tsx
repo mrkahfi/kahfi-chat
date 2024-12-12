@@ -1,13 +1,24 @@
-import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Chat } from '../types/chat';
 
 interface ChatListProps {
   chats: Chat[];
-  selectedChatId: string | null;
-  onChatSelect: (chatId: string) => void;
+  selectedChatId?: string | null;
+  onChatSelect?: (chatId: string) => void;
 }
 
 export function ChatList({ chats, selectedChatId, onChatSelect }: ChatListProps) {
+
+  const navigate = useNavigate()
+
+  const handleChatClick = (chatId: string) => {
+    if (onChatSelect) {
+      onChatSelect(chatId);
+    } else {
+      navigate(`/chat/${chatId}`);
+    }
+  };
+
   return (
     <div className="h-full">
       <div className="p-4 bg-gray-50 border-b">
@@ -17,7 +28,7 @@ export function ChatList({ chats, selectedChatId, onChatSelect }: ChatListProps)
         {chats.map((chat) => (
           <button
             key={chat.id}
-            onClick={() => onChatSelect(chat.id)}
+            onClick={() => handleChatClick(chat.id)}
             className={`w-full p-4 flex items-center space-x-4 hover:bg-gray-50 border-b transition-colors ${
               selectedChatId === chat.id ? 'bg-gray-100' : ''
             }`}
