@@ -18,6 +18,7 @@ export function ChatDetail({ chat, messages, onBack }: ChatDetailProps) {
   useEffect(() => {
     setChatMessages(messages);
   }, [messages]);
+
   const handleSendMessage = (message: string) => {
     const newMessage: Message = {
       id: Date.now().toString(),

@@ -1,18 +1,40 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { mockChats, mockMessages } from '../data/mockData';
 import { ChatDetail } from '../components/ChatDetail';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { useEffect, useState } from 'react';
+import { Chat, Message } from '../types/chat';
+import { getChatById, getMessages } from '../data/chatDatabase';
 
 function ChatDetailPage() {
   const navigate = useNavigate();
   const { chatId } = useParams<{ chatId: string }>();
   const isMobile = useIsMobile();
 
-  const selectedChat = chatId
-    ? mockChats.find((chat) => chat.id === chatId)
-    : null;
+  const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
 
-  const messages = chatId ? mockMessages[chatId] || [] : [];
+  const [messages, setMessages] = useState<Message[]>([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!chatId) return;
+
+      try {
+        const [fetchedChat, fetchedMessages] = await Promise.all([
+          getChatById(chatId),
+          getMessages(chatId),
+        ]);
+
+        if (fetchedChat) {
+          setSelectedChat(fetchedChat);
+        }
+
+        setMessages(fetchedMessages);
+      } catch (error) {
+        console.error('Error fetching chat data:', error);
+      }
+    };
+
+    fetchData();
+  }, [chatId]);
 
   const handleBack = () => {
     navigate('/');
