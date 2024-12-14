@@ -1,20 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import { ChatList } from '../components/ChatList';
-import { useEffect, useState } from 'react';
 import { Chat } from '../types/chat';
-import { addChat, getChats } from '../data/chatDatabase';
+import { addChat } from '../data/chatDatabase';
+import { useChats } from '../hooks/useChats';
 
 function ChatLayout() {
-  const [chats, setChats] = useState<Chat[]>([]);
-
-  useEffect(() => {
-    const fetchChats = async () => {
-      const fetchedChats = await getChats();
-      setChats(fetchedChats);
-    };
-
-    fetchChats();
-  }, []);
+  const { chats, setChats } = useChats();
 
   const handleOnNewChat = async (name: string, image: File) => {
     const newChat: Chat = {

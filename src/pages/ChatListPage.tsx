@@ -5,25 +5,17 @@ import { EmptyState } from '../components/chat/EmptyState';
 import { useEffect, useState } from 'react';
 import { Chat } from '../types/chat';
 import { addChat, getChats } from '../data/chatDatabase';
+import { useChats } from '../hooks/useChats';
 
 function ChatListPage() {
   const navigate = useNavigate();
   const { chatId } = useParams();
   const isMobile = useIsMobile();
-  const [chats, setChats] = useState<Chat[]>([]);
+  const { chats, setChats } = useChats();
 
   const handleChatSelect = (selectedChatId: string) => {
     navigate(`/chat/${selectedChatId}`);
   };
-
-  useEffect(() => {
-    const fetchChats = async () => {
-      const fetchedChats = await getChats();
-      setChats(fetchedChats);
-    };
-
-    fetchChats();
-  }, []);
 
   const handleOnNewChat = async (name: string, image: File) => {
     const newChat: Chat = {

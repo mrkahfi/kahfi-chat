@@ -8,7 +8,6 @@ import { getChatById, getMessages } from '../data/chatDatabase';
 function ChatDetailPage() {
   const navigate = useNavigate();
   const { chatId } = useParams<{ chatId: string }>();
-  const isMobile = useIsMobile();
 
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
 
