@@ -29,10 +29,27 @@ export function ChatDetail({
           minute: '2-digit',
           hour12: true,
         })
-        .toLocaleLowerCase(),
+        .toLocaleUpperCase(),
       sender: 'user',
     };
     setChatMessages([...chatMessages, newMessage]);
+
+    // Simulate server response
+    setTimeout(() => {
+      const serverResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        content: 'This is a simulated server response.',
+        timestamp: new Date()
+          .toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+          })
+          .toLocaleUpperCase(),
+        sender: 'other',
+      };
+      setChatMessages((prevMessages) => [...prevMessages, serverResponse]);
+    }, 1000); // 1 second delay
   };
 
   if (!chat) {
