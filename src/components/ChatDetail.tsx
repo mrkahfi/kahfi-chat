@@ -3,6 +3,7 @@ import { ChatHeader } from './chat/ChatHeader';
 import { MessageList } from './chat/MessageList';
 import { MessageInput } from './chat/MessageInput';
 import { EmptyState } from './chat/EmptyState';
+import { useState } from 'react';
 
 interface ChatDetailProps {
   chat: Chat | null;
@@ -17,8 +18,21 @@ export function ChatDetail({
   onBack,
   isMobile,
 }: ChatDetailProps) {
+  const [chatMessages, setChatMessages] = useState(messages);
   const handleSendMessage = (message: string) => {
-    console.log('Sending message:', message);
+    const newMessage: Message = {
+      id: Date.now().toString(),
+      content: message,
+      timestamp: new Date()
+        .toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        })
+        .toLocaleLowerCase(),
+      sender: 'user',
+    };
+    setChatMessages([...chatMessages, newMessage]);
   };
 
   if (!chat) {
@@ -28,7 +42,7 @@ export function ChatDetail({
   return (
     <div className="h-full flex flex-col">
       <ChatHeader chat={chat} onBack={onBack} isMobile={isMobile} />
-      <MessageList messages={messages} />
+      <MessageList messages={chatMessages} />
       <MessageInput onSendMessage={handleSendMessage} />
     </div>
   );
