@@ -3,7 +3,7 @@ import { ChatHeader } from './chat/ChatHeader';
 import { MessageList } from './chat/MessageList';
 import { MessageInput } from './chat/MessageInput';
 import { EmptyState } from './chat/EmptyState';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 
 interface ChatDetailProps {
@@ -21,6 +21,9 @@ export function ChatDetail({
 }: ChatDetailProps) {
   const [chatMessages, setChatMessages] = useState(messages);
 
+  useEffect(() => {
+    setChatMessages(messages);
+  }, [messages]);
   const handleSendMessage = (message: string) => {
     const newMessage: Message = {
       id: Date.now().toString(),
@@ -28,7 +31,7 @@ export function ChatDetail({
       timestamp: new Date(),
       sender: 'user',
     };
-    setChatMessages([...chatMessages, newMessage]);
+    setChatMessages((prevMessages) => [...prevMessages, newMessage]);
 
     // Simulate server response
     setTimeout(() => {
