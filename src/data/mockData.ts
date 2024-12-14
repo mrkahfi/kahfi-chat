@@ -5,7 +5,7 @@ export const mockChats: Chat[] = [
     id: '1',
     name: 'Alice Johnson',
     lastMessage: 'See you tomorrow!',
-    timestamp: '10:30 AM',
+    timestamp: new Date('2024-12-15T10:30:00'),
     avatar:
       'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',
   },
@@ -13,7 +13,7 @@ export const mockChats: Chat[] = [
     id: '2',
     name: 'Bob Smith',
     lastMessage: 'How about lunch?',
-    timestamp: '9:15 AM',
+    timestamp: new Date('2024-12-15T09:15:00'),
     avatar:
       'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=100&h=100&fit=crop',
   },
@@ -21,7 +21,7 @@ export const mockChats: Chat[] = [
     id: '3',
     name: 'Carol White',
     lastMessage: 'The meeting went well',
-    timestamp: 'Yesterday',
+    timestamp: new Date('2024-12-14T12:00:00'),
     avatar:
       'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',
   },
@@ -29,17 +29,22 @@ export const mockChats: Chat[] = [
 
 export const mockMessages: Record<string, Message[]> = {
   '1': [
-    { id: '1', content: 'Hey there!', timestamp: '10:00 AM', sender: 'other' },
+    {
+      id: '1',
+      content: 'Hey there!',
+      timestamp: new Date('2024-12-15T10:00:00'),
+      sender: 'other',
+    },
     {
       id: '2',
       content: 'Hi! How are you?',
-      timestamp: '10:15 AM',
+      timestamp: new Date('2024-12-15T10:15:00'),
       sender: 'user',
     },
     {
       id: '3',
       content: 'See you tomorrow!',
-      timestamp: '10:30 AM',
+      timestamp: new Date('2024-12-15T10:30:00'),
       sender: 'other',
     },
   ],

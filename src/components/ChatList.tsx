@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Chat } from '../types/chat';
+import { format } from 'date-fns';
 
 interface ChatListProps {
   chats: Chat[];
@@ -46,7 +47,9 @@ export function ChatList({
                 <h3 className="text-sm font-semibold text-gray-900 truncate">
                   {chat.name}
                 </h3>
-                <span className="text-xs text-gray-500">{chat.timestamp}</span>
+                <span className="text-xs text-gray-500">
+                  {format(new Date(), 'HH:mm')}
+                </span>
               </div>
               <p className="text-sm text-gray-500 truncate">
                 {chat.lastMessage}

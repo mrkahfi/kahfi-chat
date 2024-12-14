@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { Message } from '../../types/chat';
 
 interface ChatMessageProps {
@@ -18,7 +19,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
       >
         <p>{message.content}</p>
         <span className="text-xs opacity-75 mt-1 block">
-          {message.timestamp}
+          {format(new Date(message.timestamp), 'HH:mm')}
         </span>
       </div>
     </div>
