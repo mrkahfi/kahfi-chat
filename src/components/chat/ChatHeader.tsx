@@ -1,13 +1,14 @@
 import { ArrowLeft } from 'lucide-react';
 import { Chat } from '../../types/chat';
+import { useIsMobile } from '../../hooks/useIsMobile';
 
 interface ChatHeaderProps {
   chat: Chat;
   onBack: () => void;
-  isMobile: boolean;
 }
 
-export function ChatHeader({ chat, onBack, isMobile }: ChatHeaderProps) {
+export function ChatHeader({ chat, onBack }: ChatHeaderProps) {
+  const isMobile = useIsMobile();
   return (
     <div className="p-4 bg-gray-50 border-b flex items-center space-x-4">
       {isMobile && (

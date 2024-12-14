@@ -10,15 +10,9 @@ interface ChatDetailProps {
   chat: Chat | null;
   messages: Message[];
   onBack: () => void;
-  isMobile: boolean;
 }
 
-export function ChatDetail({
-  chat,
-  messages,
-  onBack,
-  isMobile,
-}: ChatDetailProps) {
+export function ChatDetail({ chat, messages, onBack }: ChatDetailProps) {
   const [chatMessages, setChatMessages] = useState(messages);
 
   useEffect(() => {
@@ -51,7 +45,7 @@ export function ChatDetail({
 
   return (
     <div className="h-full flex flex-col">
-      <ChatHeader chat={chat} onBack={onBack} isMobile={isMobile} />
+      <ChatHeader chat={chat} onBack={onBack} />
       <MessageList
         messages={chatMessages.map((msg) => ({
           ...msg,

@@ -24,12 +24,7 @@ function ChatDetailPage() {
 
   return (
     <div className="h-full">
-      <ChatDetail
-        chat={selectedChat}
-        messages={messages}
-        onBack={handleBack}
-        isMobile={isMobile}
-      />
+      <ChatDetail chat={selectedChat} messages={messages} onBack={handleBack} />
     </div>
   );
 }
