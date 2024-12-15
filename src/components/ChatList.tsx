@@ -1,10 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { Chat } from '../types/chat';
-import { format } from 'date-fns';
 import { PlusIcon } from '@heroicons/react/24/solid';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { NewChatDialog } from './NewChatDialog';
-import { getImage } from '../data/chatDatabase';
 import { ChatItem } from './chat/ChatItem';
 
 interface ChatListProps {
@@ -14,12 +12,7 @@ interface ChatListProps {
   onNewChat?: (name: string, image: File) => void;
 }
 
-export function ChatList({
-  chats,
-  selectedChatId,
-  onChatSelect,
-  onNewChat,
-}: ChatListProps) {
+export function ChatList({ chats, onChatSelect, onNewChat }: ChatListProps) {
   const navigate = useNavigate();
   const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
 
