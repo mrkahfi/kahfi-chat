@@ -3,7 +3,7 @@ import { useIsMobile } from '../hooks/useIsMobile';
 import { ChatList } from '../components/ChatList';
 import { EmptyState } from '../components/chat/EmptyState';
 import { Chat } from '../types/chat';
-import { addChat } from '../data/chatDatabase';
+import { addChat, saveImage } from '../data/chatDatabase';
 import { useChats } from '../hooks/useChats';
 
 function ChatListPage() {
@@ -17,10 +17,14 @@ function ChatListPage() {
   };
 
   const handleOnNewChat = async (name: string, image: File) => {
+    const id = Date.now().toString();
+    const imageBlob = new Blob([image], { type: image.type });
+    await saveImage(id, imageBlob);
+
     const newChat: Chat = {
-      id: Date.now().toString(),
+      id: id,
       name,
-      avatar: URL.createObjectURL(image),
+      avatar: id,
       lastMessage: '',
       timestamp: new Date(),
     };

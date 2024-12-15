@@ -2,8 +2,10 @@ import { useNavigate } from 'react-router-dom';
 import { Chat } from '../types/chat';
 import { format } from 'date-fns';
 import { PlusIcon } from '@heroicons/react/24/solid';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NewChatDialog } from './NewChatDialog';
+import { getImage } from '../data/chatDatabase';
+import { ChatItem } from './chat/ChatItem';
 
 interface ChatListProps {
   chats: Chat[];
@@ -42,32 +44,11 @@ export function ChatList({
       </div>
       <div className="overflow-y-auto">
         {chats.map((chat) => (
-          <button
-            key={chat.id}
+          <ChatItem
+            chat={chat}
+            isSelected={false}
             onClick={() => handleChatClick(chat.id)}
-            className={`w-full p-4 flex items-center space-x-4 hover:bg-gray-50 border-b transition-colors ${
-              selectedChatId === chat.id ? 'bg-gray-100' : ''
-            }`}
-          >
-            <img
-              src={chat.avatar}
-              alt={chat.name}
-              className="w-12 h-12 rounded-full object-cover"
-            />
-            <div className="flex-1 min-w-0">
-              <div className="flex justify-between items-baseline">
-                <h3 className="text-sm font-semibold text-gray-900 truncate">
-                  {chat.name}
-                </h3>
-                <span className="text-xs text-gray-500">
-                  {format(new Date(), 'HH:mm')}
-                </span>
-              </div>
-              <p className="text-sm text-gray-500 truncate">
-                {chat.lastMessage}
-              </p>
-            </div>
-          </button>
+          />
         ))}
       </div>
       <button

@@ -1,17 +1,21 @@
 import { Outlet } from 'react-router-dom';
 import { ChatList } from '../components/ChatList';
 import { Chat } from '../types/chat';
-import { addChat } from '../data/chatDatabase';
+import { addChat, saveImage } from '../data/chatDatabase';
 import { useChats } from '../hooks/useChats';
 
 function ChatLayout() {
   const { chats, setChats } = useChats();
 
   const handleOnNewChat = async (name: string, image: File) => {
+    const id = Date.now().toString();
+    const imageBlob = new Blob([image], { type: image.type });
+    await saveImage(id, imageBlob);
+
     const newChat: Chat = {
-      id: Date.now().toString(),
+      id: id,
       name,
-      avatar: URL.createObjectURL(image),
+      avatar: id,
       lastMessage: '',
       timestamp: new Date(),
     };
@@ -19,6 +23,7 @@ function ChatLayout() {
     await addChat(newChat);
     setChats((prevChats) => [...prevChats, newChat]);
   };
+
   return (
     <div className="h-screen flex bg-white">
       <div className="w-1/3 border-r">
