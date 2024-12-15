@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { ChatDetail } from '../components/ChatDetail';
-import { useIsMobile } from '../hooks/useIsMobile';
 import { useEffect, useState } from 'react';
 import { Chat, Message } from '../types/chat';
 import { getChatById, getMessages } from '../data/chatDatabase';

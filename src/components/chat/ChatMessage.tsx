@@ -13,7 +13,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
       <div
         className={`max-w-[70%] p-3 rounded-lg ${
           message.sender === 'user'
-            ? 'bg-blue-500 text-white'
+            ? 'bg-blue-600 text-white'
             : 'bg-white text-gray-800'
         }`}
       >

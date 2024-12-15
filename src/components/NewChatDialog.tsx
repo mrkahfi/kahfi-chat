@@ -49,7 +49,7 @@ export function NewChatDialog({ isOpen, onClose, onSave }: NewChatDialogProps) {
             <div>
               <label
                 htmlFor="chat-name"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Chat Name
               </label>
@@ -58,13 +58,13 @@ export function NewChatDialog({ isOpen, onClose, onSave }: NewChatDialogProps) {
                 id="chat-name"
                 value={name}
                 onChange={handleNameChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                className="flex-1 w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div>
               <label
                 htmlFor="chat-image"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Chat Image
               </label>
@@ -95,7 +95,7 @@ export function NewChatDialog({ isOpen, onClose, onSave }: NewChatDialogProps) {
             <button
               onClick={handleSave}
               disabled={!name || !image}
-              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-blue-500 hover:bg-blue-600 transition-colors text-base text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
               Save
             </button>
