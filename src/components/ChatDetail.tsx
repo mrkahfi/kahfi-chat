@@ -40,13 +40,29 @@ export function ChatDetail({ chat, messages, onBack }: ChatDetailProps) {
     }, 1000); // 1 second delay
   };
 
+  const handleClear = () => {
+    setChatMessages([]);
+  };
+
+  const handleDelete = () => {
+    // Simulate server request
+    setTimeout(() => {
+      setChatMessages([]);
+    }, 1000); // 1 second delay
+  };
+
   if (!chat) {
     return <EmptyState />;
   }
 
   return (
     <div className="h-full flex flex-col">
-      <ChatHeader chat={chat} onBack={onBack} />
+      <ChatHeader
+        chat={chat}
+        onBack={onBack}
+        onClear={handleClear}
+        onDelete={handleDelete}
+      />
       <MessageList
         messages={chatMessages.map((msg) => ({
           ...msg,
