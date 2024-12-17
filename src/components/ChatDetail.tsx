@@ -5,19 +5,38 @@ import { MessageInput } from './chat/MessageInput';
 import { EmptyState } from './chat/EmptyState';
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
+import {
+  addMessage,
+  clearChat,
+  deleteChat,
+  getMessages,
+} from '../data/chatDatabase';
 
 interface ChatDetailProps {
-  chat: Chat | null;
-  messages: Message[];
+  chat: Chat;
   onBack: () => void;
 }
 
-export function ChatDetail({ chat, messages, onBack }: ChatDetailProps) {
-  const [chatMessages, setChatMessages] = useState(messages);
+export function ChatDetail({ chat, onBack }: ChatDetailProps) {
+  const [chatMessages, setChatMessages] = useState<Message[]>([]);
+
+  console.log('chat?.id ', chat?.id);
 
   useEffect(() => {
-    setChatMessages(messages);
-  }, [messages]);
+    const fetchData = async () => {
+      if (!chat?.id) return;
+
+      try {
+        const [fetchedMessages] = await Promise.all([getMessages(chat.id)]);
+
+        setChatMessages(fetchedMessages);
+      } catch (error) {
+        console.error('Error fetching chat data:', error);
+      }
+    };
+
+    fetchData();
+  }, [chat?.id]);
 
   const handleSendMessage = (message: string) => {
     const newMessage: Message = {
@@ -25,30 +44,34 @@ export function ChatDetail({ chat, messages, onBack }: ChatDetailProps) {
       content: message,
       timestamp: new Date(),
       sender: 'user',
+      chatId: chat.id,
     };
     setChatMessages((prevMessages) => [...prevMessages, newMessage]);
+    addMessage(chat.id, newMessage);
 
-    // Simulate server response
     setTimeout(() => {
       const serverResponse: Message = {
         id: (Date.now() + 1).toString(),
-        content: 'This is a simulated server response.',
+        content: 'You wrote "' + message + '"',
         timestamp: new Date(),
         sender: 'other',
+        chatId: chat.id,
       };
       setChatMessages((prevMessages) => [...prevMessages, serverResponse]);
-    }, 1000); // 1 second delay
+      addMessage(chat.id, serverResponse);
+    }, 1000);
   };
 
   const handleClear = () => {
-    setChatMessages([]);
+    if (chat) {
+      clearChat(chat.id);
+    }
   };
 
   const handleDelete = () => {
-    // Simulate server request
-    setTimeout(() => {
-      setChatMessages([]);
-    }, 1000); // 1 second delay
+    if (chat) {
+      deleteChat(chat.id);
+    }
   };
 
   if (!chat) {

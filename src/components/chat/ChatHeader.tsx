@@ -1,7 +1,7 @@
 import { ArrowLeft, MoreVertical, Trash2, Eraser } from 'lucide-react';
 import { Chat } from '../../types/chat';
 import { useIsMobile } from '../../hooks/useIsMobile';
-import { useState } from 'react';
+
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 
 interface ChatHeaderProps {

@@ -58,7 +58,9 @@ export async function addMessage(
   chatId: string,
   message: Message
 ): Promise<void> {
-  await db.messages.add(message);
+  console.log(message);
+  await db.open();
+  await db.messages.add({ ...message, chatId });
   await db.chats.update(chatId, {
     lastMessage: message.content,
     timestamp: message.timestamp,
@@ -68,4 +70,16 @@ export async function addMessage(
 export async function addChat(chat: Chat): Promise<void> {
   await db.open();
   await db.chats.put(chat);
+}
+
+export async function deleteChat(chatId: string): Promise<void> {
+  await db.open();
+  await db.chats.delete(chatId);
+  await db.messages.where({ chatId }).delete();
+  await db.images.where({ chatId }).delete();
+}
+
+export async function clearChat(chatId: string): Promise<void> {
+  await db.open();
+  await db.messages.where({ chatId }).delete();
 }
