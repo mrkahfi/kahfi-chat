@@ -3,6 +3,8 @@ import { Chat } from '../../types/chat';
 import { useIsMobile } from '../../hooks/useIsMobile';
 
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { useEffect, useState } from 'react';
+import { getImage } from '../../data/chatDatabase';
 
 interface ChatHeaderProps {
   chat: Chat;
@@ -19,6 +21,21 @@ export function ChatHeader({
 }: ChatHeaderProps) {
   const isMobile = useIsMobile();
 
+  const [avatar, setAvatar] = useState<string | undefined>(chat.avatar);
+
+  useEffect(() => {
+    const loadAvatar = async () => {
+      if (chat.avatar) {
+        const blob = await getImage(chat.avatar);
+        if (blob) {
+          setAvatar(URL.createObjectURL(blob));
+        }
+      }
+    };
+
+    loadAvatar();
+  }, [chat.avatar]);
+
   return (
     <div className="p-4 bg-gray-50 border-b flex items-center justify-between">
       <div className="flex items-center space-x-4">
@@ -31,7 +48,7 @@ export function ChatHeader({
           </button>
         )}
         <img
-          src={chat.avatar}
+          src={avatar}
           alt={chat.name}
           className="w-10 h-10 rounded-full object-cover"
         />
