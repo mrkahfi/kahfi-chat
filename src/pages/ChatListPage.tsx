@@ -4,7 +4,7 @@ import { ChatList } from '../components/ChatList';
 import { EmptyState } from '../components/chat/EmptyState';
 import { Chat } from '../types/chat';
 import { addChat, saveImage } from '../data/chatDatabase';
-import { useChats } from '../hooks/useChats';
+import { useChats } from '../hooks/chatHooks';
 
 function ChatListPage() {
   const navigate = useNavigate();

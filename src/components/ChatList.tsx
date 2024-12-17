@@ -38,7 +38,7 @@ export function ChatList({ chats, onChatSelect, onNewChat }: ChatListProps) {
       <div className="overflow-y-auto">
         {chats.map((chat) => (
           <ChatItem
-            chat={chat}
+            chatId={chat.id}
             isSelected={false}
             onClick={() => handleChatClick(chat.id)}
           />

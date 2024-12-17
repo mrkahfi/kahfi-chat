@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 import { ChatList } from '../components/ChatList';
 import { Chat } from '../types/chat';
 import { addChat, saveImage } from '../data/chatDatabase';
-import { useChats } from '../hooks/useChats';
+import { useChats } from '../hooks/chatHooks';
 
 function ChatLayout() {
   const { chats, setChats } = useChats();
