@@ -3,14 +3,10 @@ import { ChatHeader } from './chat/ChatHeader';
 import { MessageList } from './chat/MessageList';
 import { MessageInput } from './chat/MessageInput';
 import { EmptyState } from './chat/EmptyState';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { format } from 'date-fns';
-import {
-  addMessage,
-  clearChat,
-  deleteChat,
-  getMessages,
-} from '../data/chatDatabase';
+import { clearChat, deleteChat, getMessages } from '../data/chatDatabase';
+import { useChatStore } from '../stores/chatStore';
 
 interface ChatDetailProps {
   chat: Chat;
@@ -18,9 +14,7 @@ interface ChatDetailProps {
 }
 
 export function ChatDetail({ chat, onBack }: ChatDetailProps) {
-  const [chatMessages, setChatMessages] = useState<Message[]>([]);
-
-  console.log('chat?.id ', chat?.id);
+  const { messages, setMessages, sendMessage } = useChatStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,7 +23,7 @@ export function ChatDetail({ chat, onBack }: ChatDetailProps) {
       try {
         const [fetchedMessages] = await Promise.all([getMessages(chat.id)]);
 
-        setChatMessages(fetchedMessages);
+        setMessages(fetchedMessages);
       } catch (error) {
         console.error('Error fetching chat data:', error);
       }
@@ -37,6 +31,8 @@ export function ChatDetail({ chat, onBack }: ChatDetailProps) {
 
     fetchData();
   }, [chat?.id]);
+
+  console.log('messages: ');
 
   const handleSendMessage = (message: string) => {
     const newMessage: Message = {
@@ -46,20 +42,18 @@ export function ChatDetail({ chat, onBack }: ChatDetailProps) {
       sender: 'user',
       chatId: chat.id,
     };
-    setChatMessages((prevMessages) => [...prevMessages, newMessage]);
-    addMessage(chat.id, newMessage);
+    sendMessage(chat.id, newMessage);
 
     setTimeout(() => {
       const serverResponse: Message = {
-        id: (Date.now() + 1).toString(),
+        id: (Date.now() + 2).toString(),
         content: 'You wrote "' + message + '"',
         timestamp: new Date(),
         sender: 'other',
         chatId: chat.id,
       };
-      setChatMessages((prevMessages) => [...prevMessages, serverResponse]);
-      addMessage(chat.id, serverResponse);
-    }, 1000);
+      sendMessage(chat.id, serverResponse);
+    }, 2000);
   };
 
   const handleClear = () => {
@@ -87,7 +81,7 @@ export function ChatDetail({ chat, onBack }: ChatDetailProps) {
         onDelete={handleDelete}
       />
       <MessageList
-        messages={chatMessages.map((msg) => ({
+        messages={messages.map((msg) => ({
           ...msg,
           formattedTimestamp: format(new Date(msg.timestamp), 'HH:mm'),
         }))}

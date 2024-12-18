@@ -4,19 +4,23 @@ import { PlusIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import { NewChatDialog } from './NewChatDialog';
 import { ChatItem } from './chat/ChatItem';
+import { useChatStore } from '../stores/chatStore';
+import { addChat, saveImage } from '../data/chatDatabase';
 
 interface ChatListProps {
-  chats: Chat[];
   selectedChatId?: string | null;
   onChatSelect?: (chatId: string) => void;
-  onNewChat?: (name: string, image: File) => void;
+  onNewChat?: (newChat: Chat) => void;
 }
 
-export function ChatList({ chats, onChatSelect, onNewChat }: ChatListProps) {
+export function ChatList({ onChatSelect, onNewChat }: ChatListProps) {
   const navigate = useNavigate();
+  const { chats, setCurrentChat, setChats } = useChatStore();
+
   const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
 
   const handleChatClick = (chatId: string) => {
+    setCurrentChat(chatId);
     if (onChatSelect) {
       onChatSelect(chatId);
     } else {
@@ -24,9 +28,24 @@ export function ChatList({ chats, onChatSelect, onNewChat }: ChatListProps) {
     }
   };
 
-  const handleNewChat = (name: string, image: File) => {
+  const handleNewChat = async (name: string, image: File) => {
+    const id = Date.now().toString();
+    const imageBlob = new Blob([image], { type: image.type });
+    await saveImage(id, imageBlob);
+
+    const newChat: Chat = {
+      id: id,
+      name,
+      avatar: id,
+      lastMessage: '',
+      timestamp: new Date(),
+    };
+
+    await addChat(newChat);
+    setChats([...chats, newChat]);
+
     if (onNewChat) {
-      onNewChat(name, image);
+      onNewChat(newChat);
     }
   };
 
@@ -38,6 +57,7 @@ export function ChatList({ chats, onChatSelect, onNewChat }: ChatListProps) {
       <div className="overflow-y-auto">
         {chats.map((chat) => (
           <ChatItem
+            key={chat.id}
             chatId={chat.id}
             isSelected={false}
             onClick={() => handleChatClick(chat.id)}

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { format } from 'date-fns';
-import { Chat } from '../../types/chat';
-import { getImage } from '../../data/chatDatabase';
-import { useChatById } from '../../hooks/chatHooks';
+
+import { useChatItem } from '../../hooks/useChatItem';
 
 interface ChatItemProps {
   chatId: string;
@@ -15,48 +14,36 @@ export const ChatItem: React.FC<ChatItemProps> = ({
   isSelected,
   onClick,
 }) => {
-  const { chat } = useChatById(chatId);
-  const [avatar, setAvatar] = useState<string | undefined>(chat?.avatar);
+  const { chat, avatar } = useChatItem(chatId);
 
-  useEffect(() => {
-    const loadAvatar = async () => {
-      if (chat?.avatar) {
-        const blob = await getImage(chat.avatar);
-        if (blob) {
-          setAvatar(URL.createObjectURL(blob));
-        }
-      }
-    };
+  if (!chat) return null;
 
-    loadAvatar();
-  }, [chat?.avatar]);
-
-  if (!chat) {
-    return <div className="flex justify-center items-center h-12" />;
-  }
+  console.log('ok');
 
   return (
     <button
       onClick={onClick}
       className={`w-full p-4 flex items-center space-x-4 hover:bg-gray-50 border-b transition-colors ${
-        isSelected ? 'bg-gray-100' : ''
+        isSelected || chat?.id === chat.id ? 'bg-gray-100' : ''
       }`}
     >
       <img
         src={avatar}
-        alt={chat?.name}
+        alt={chat.name}
         className="w-12 h-12 rounded-full object-cover"
       />
-      <div className="flex-1 min-w-0">
-        <div className="flex justify-between items-baseline">
+      <div className="flex-1 min-w-0 ">
+        <div className="flex justify-between items-baseline mb-1">
           <h3 className="text-sm font-semibold text-gray-900 truncate">
-            {chat?.name}
+            {chat.name}
           </h3>
           <span className="text-xs text-gray-500">
-            {format(new Date(), 'HH:mm')}
+            {format(new Date(chat.timestamp), 'HH:mm')}
           </span>
         </div>
-        <p className="text-sm text-gray-500 truncate">{chat?.lastMessage}</p>
+        <p className="text-sm text-gray-500 truncate text-left">
+          {chat?.lastMessage}
+        </p>
       </div>
     </button>
   );

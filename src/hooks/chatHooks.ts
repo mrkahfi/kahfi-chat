@@ -36,7 +36,11 @@ export const useChatById = (chatId: string) => {
       return null;
     };
     fetchChatById();
-  }, []);
 
-  return { chat, setChat };
+    return () => {
+      setChat(null);
+    };
+  }, [chatId]);
+
+  return { chat };
 };

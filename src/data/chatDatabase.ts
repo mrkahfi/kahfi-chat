@@ -17,7 +17,7 @@ class ChatDatabase extends Dexie {
   }
 }
 
-const db = new ChatDatabase();
+export const db = new ChatDatabase();
 
 export async function initializeDatabase(): Promise<void> {
   await db.open();
@@ -58,12 +58,13 @@ export async function addMessage(
   chatId: string,
   message: Message
 ): Promise<void> {
-  console.log(message);
   await db.open();
-  await db.messages.add({ ...message, chatId });
-  await db.chats.update(chatId, {
-    lastMessage: message.content,
-    timestamp: message.timestamp,
+  await db.transaction('rw', db.messages, db.chats, async () => {
+    await db.messages.add(message);
+    await db.chats.update(chatId, {
+      lastMessage: message.content,
+      timestamp: message.timestamp,
+    });
   });
 }
 
