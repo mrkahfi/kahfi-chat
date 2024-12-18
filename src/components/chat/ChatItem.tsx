@@ -18,13 +18,13 @@ export const ChatItem: React.FC<ChatItemProps> = ({
 
   if (!chat) return null;
 
-  console.log('ok');
+  console.log('chatItem ', chat.id);
 
   return (
     <button
       onClick={onClick}
       className={`w-full p-4 flex items-center space-x-4 hover:bg-gray-50 border-b transition-colors ${
-        isSelected || chat?.id === chat.id ? 'bg-gray-100' : ''
+        isSelected ? 'bg-gray-100' : ''
       }`}
     >
       <img
