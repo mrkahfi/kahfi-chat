@@ -1,26 +1,22 @@
 import { useNavigate } from 'react-router-dom';
-import { Chat } from '../types/chat';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import { NewChatDialog } from './NewChatDialog';
 import { ChatItem } from './chat/ChatItem';
+
 import { useChatStore } from '../stores/chatStore';
-import { addChat, saveImage } from '../data/chatDatabase';
 
 interface ChatListProps {
   selectedChatId?: string | null;
   onChatSelect?: (chatId: string) => void;
-  onNewChat?: (newChat: Chat) => void;
 }
 
-export function ChatList({ onChatSelect, onNewChat }: ChatListProps) {
+export function ChatList({ onChatSelect }: ChatListProps) {
   const navigate = useNavigate();
-  const { chats, setCurrentChat, setChats } = useChatStore();
-
+  const { chats, addChat } = useChatStore();
   const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
 
   const handleChatClick = (chatId: string) => {
-    setCurrentChat(chatId);
     if (onChatSelect) {
       onChatSelect(chatId);
     } else {
@@ -28,25 +24,10 @@ export function ChatList({ onChatSelect, onNewChat }: ChatListProps) {
     }
   };
 
+  console.log('chatlists');
+
   const handleNewChat = async (name: string, image: File) => {
-    const id = Date.now().toString();
-    const imageBlob = new Blob([image], { type: image.type });
-    await saveImage(id, imageBlob);
-
-    const newChat: Chat = {
-      id: id,
-      name,
-      avatar: id,
-      lastMessage: '',
-      timestamp: new Date(),
-    };
-
-    await addChat(newChat);
-    setChats([...chats, newChat]);
-
-    if (onNewChat) {
-      onNewChat(newChat);
-    }
+    addChat(name, image);
   };
 
   return (

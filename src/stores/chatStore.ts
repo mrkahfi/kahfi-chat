@@ -1,8 +1,13 @@
 import { create } from 'zustand';
 import { Chat, Message } from '../types/chat';
-import { getChatById, addMessage } from '../data/chatDatabase';
+import {
+  addMessage,
+  addChat as dbAddChat,
+  saveImage,
+} from '../data/chatDatabase';
 
 interface ChatStore {
+  addChat: (name: string, image: File) => void;
   chats: Chat[];
   messages: Message[];
   currentChat: Chat | null;
@@ -14,6 +19,24 @@ interface ChatStore {
 }
 
 export const useChatStore = create<ChatStore>((set) => ({
+  addChat: async (name: string, image: File) => {
+    const id = Date.now().toString();
+    const imageBlob = new Blob([image], { type: image.type });
+    await saveImage(id, imageBlob);
+
+    const newChat: Chat = {
+      id: id,
+      name,
+      avatar: id,
+      timestamp: new Date(),
+    };
+
+    await dbAddChat(newChat);
+    return set((state) => ({
+      chats: [...state.chats, newChat],
+      currentChat: newChat,
+    }));
+  },
   chats: [],
   messages: [],
   currentChat: null,
@@ -28,24 +51,24 @@ export const useChatStore = create<ChatStore>((set) => ({
   },
   setMessages: (messages) => set({ messages }),
   setCurrentChat: async (chatId) => {
-    const chat = await getChatById(chatId);
-    set({ currentChat: chat || null });
+    set((state) => {
+      const chat = state.chats.find((c) => c.id === chatId);
+      return { currentChat: chat || null };
+    });
   },
   sendMessage: async (chatId, message) => {
     await addMessage(chatId, message);
     set((state) => {
       const updatedChat = state.chats.find((c) => c.id === chatId);
-      console.log(' state.chats ', state.chats.length);
-      console.log('updatedChat:', updatedChat);
 
       if (updatedChat) {
         updatedChat.lastMessage = message.content;
-        state.updateChat(updatedChat);
+        if (state.currentChat?.id === chatId) {
+          state.updateChat(updatedChat);
+        }
       }
-      console.log('Current chat:', updatedChat);
       return {
         messages: [...state.messages, message],
-        currentChat: updatedChat || state.currentChat,
       };
     });
   },

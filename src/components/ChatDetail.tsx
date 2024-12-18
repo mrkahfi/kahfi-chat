@@ -32,8 +32,6 @@ export function ChatDetail({ chat, onBack }: ChatDetailProps) {
     fetchData();
   }, [chat?.id]);
 
-  console.log('messages: ');
-
   const handleSendMessage = (message: string) => {
     const newMessage: Message = {
       id: Date.now().toString(),

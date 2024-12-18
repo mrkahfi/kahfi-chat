@@ -84,3 +84,8 @@ export async function clearChat(chatId: string): Promise<void> {
   await db.open();
   await db.messages.where({ chatId }).delete();
 }
+
+export async function updateChat(chat: Chat): Promise<void> {
+  await db.open();
+  await db.chats.update(chat.id, chat);
+}
