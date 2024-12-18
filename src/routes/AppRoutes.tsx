@@ -12,7 +12,8 @@ export function AppRoutes() {
     return (
       <MobileLayout>
         <Routes>
-          <Route path="/" element={<ChatListPage />} />
+          <Route path="/" element={<Navigate to="/chat" replace />} />
+          <Route path="/chat" element={<ChatListPage />} />
           <Route path="/chat/:chatId" element={<ChatDetailPage />} />
         </Routes>
       </MobileLayout>

@@ -11,6 +11,8 @@ function ChatListPage() {
   const isMobile = useIsMobile();
   const { currentChat } = useChatStore();
 
+  console.log('chatListPage ', chatId);
+
   const handleChatSelect = (selectedChatId: string) => {
     navigate(`/chat/${selectedChatId}`);
   };
