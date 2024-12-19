@@ -24,6 +24,8 @@ export function ChatList({ chats, onChatSelect, onNewChat }: ChatListProps) {
     }
   };
 
+  console.log('chatlist');
+
   const handleNewChat = (name: string, image: File) => {
     if (onNewChat) {
       onNewChat(name, image);
@@ -38,6 +40,7 @@ export function ChatList({ chats, onChatSelect, onNewChat }: ChatListProps) {
       <div className="overflow-y-auto">
         {chats.map((chat) => (
           <ChatItem
+            key={chat.id}
             chatId={chat.id}
             isSelected={false}
             onClick={() => handleChatClick(chat.id)}

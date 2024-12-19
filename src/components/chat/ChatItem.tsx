@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
-import { Chat } from '../../types/chat';
 import { getImage } from '../../data/chatDatabase';
 import { useChatById } from '../../hooks/chatHooks';
 
