@@ -28,7 +28,7 @@ function ChatDetailPage() {
   }, [chatId]);
 
   const handleBack = () => {
-    navigate('/');
+    navigate(-1);
   };
 
   if (selectedChat === null)
