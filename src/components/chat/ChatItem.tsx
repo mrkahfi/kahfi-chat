@@ -48,7 +48,7 @@ export const ChatItem: React.FC<ChatItemProps> = ({
         className="w-12 h-12 rounded-full object-cover"
       />
       <div className="flex-1 min-w-0">
-        <div className="flex justify-between items-baseline">
+        <div className="flex justify-between items-baseline mb-1">
           <h3 className="text-sm font-semibold text-gray-900 truncate">
             {chat?.name}
           </h3>
@@ -56,7 +56,9 @@ export const ChatItem: React.FC<ChatItemProps> = ({
             {format(new Date(), 'HH:mm')}
           </span>
         </div>
-        <p className="text-sm text-gray-500 truncate">{chat?.lastMessage}</p>
+        <p className="text-sm text-left text-gray-500 truncate">
+          {chat?.lastMessage}
+        </p>
       </div>
     </button>
   );
