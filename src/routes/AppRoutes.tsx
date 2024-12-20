@@ -12,9 +12,10 @@ export function AppRoutes() {
     return (
       <MobileLayout>
         <Routes>
-          <Route path="/" element={<Navigate to="/chat" replace />} />
-          <Route path="/chat" element={<ChatListPage />} />
+          <Route path="/" element={<ChatListPage />} />
+          <Route path="/chat" element={<Navigate to="/" replace />} />
           <Route path="/chat/:chatId" element={<ChatDetailPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </MobileLayout>
     );
