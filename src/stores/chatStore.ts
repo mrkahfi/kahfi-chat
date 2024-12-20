@@ -16,7 +16,7 @@ interface ChatStore {
   currentChat: Chat | null;
   setChats: (chats: Chat[]) => void;
   updateChat: (updatedChat: Chat) => void;
-  clearChat: (chat: Chat) => void;
+  clearChat: (chat: Chat) => Promise<void>;
   deleteChat: (chat: Chat) => Promise<void>;
   setMessages: (messages: Message[]) => void;
   setCurrentChat: (chatId?: string | null) => Promise<void>;
@@ -64,12 +64,22 @@ export const useChatStore = create<ChatStore>((set) => ({
     }));
   },
 
-  clearChat: (chat) => {
-    clearChat(chat.id);
-    return set((_) => ({
-      currentChat: null,
-      messages: [],
-    }));
+  clearChat: async (chat) => {
+    await clearChat(chat.id);
+
+    set((state) => {
+      const updatedChat = state.chats.find((c) => c.id === chat.id);
+
+      if (updatedChat) {
+        updatedChat.lastMessage = '';
+        if (state.currentChat?.id === chat.id) {
+          state.updateChat(updatedChat);
+        }
+      }
+      return {
+        messages: [],
+      };
+    });
   },
   setMessages: (messages) => set({ messages }),
   setCurrentChat: async (chatId) => {

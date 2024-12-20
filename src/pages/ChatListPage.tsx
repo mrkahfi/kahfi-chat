@@ -1,4 +1,4 @@
-import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { ChatList } from '../components/ChatList';
 import { EmptyState } from '../components/chat/EmptyState';
