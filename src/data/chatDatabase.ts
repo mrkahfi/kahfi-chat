@@ -12,7 +12,7 @@ class ChatDatabase extends Dexie {
     this.version(1).stores({
       chats: '++id, name, lastMessage, timestamp, avatar',
       messages: '++id, content, timestamp, sender, chatId',
-      images: 'id, blob',
+      images: '++id, blob',
     });
   }
 }
@@ -77,7 +77,7 @@ export async function deleteChat(chatId: string): Promise<void> {
   await db.open();
   await db.chats.delete(chatId);
   await db.messages.where({ chatId }).delete();
-  await db.images.where({ chatId }).delete();
+  await db.images.where({ id: chatId }).delete();
 }
 
 export async function clearChat(chatId: string): Promise<void> {

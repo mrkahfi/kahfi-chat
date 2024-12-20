@@ -13,10 +13,11 @@ interface ChatListProps {
 
 export function ChatList({ onChatSelect }: ChatListProps) {
   const navigate = useNavigate();
-  const { chats, addChat } = useChatStore();
+  const { chats, addChat, setCurrentChat } = useChatStore();
   const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
 
   const handleChatClick = (chatId: string) => {
+    setCurrentChat(chatId);
     if (onChatSelect) {
       onChatSelect(chatId);
     } else {

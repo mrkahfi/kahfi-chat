@@ -2,7 +2,10 @@ import { create } from 'zustand';
 import { Chat, Message } from '../types/chat';
 import {
   addMessage,
+  clearChat,
   addChat as dbAddChat,
+  deleteChat,
+  getChats,
   saveImage,
 } from '../data/chatDatabase';
 
@@ -13,6 +16,8 @@ interface ChatStore {
   currentChat: Chat | null;
   setChats: (chats: Chat[]) => void;
   updateChat: (updatedChat: Chat) => void;
+  clearChat: (chat: Chat) => void;
+  deleteChat: (chat: Chat) => Promise<void>;
   setMessages: (messages: Message[]) => void;
   setCurrentChat: (chatId: string) => Promise<void>;
   sendMessage: (chatId: string, message: Message) => Promise<void>;
@@ -47,6 +52,23 @@ export const useChatStore = create<ChatStore>((set) => ({
         state.currentChat?.id === updatedChat.id
           ? updatedChat
           : state.currentChat,
+    }));
+  },
+  deleteChat: async (chat) => {
+    deleteChat(chat.id);
+    const chats = await getChats();
+    return set((_) => ({
+      currentChat: null,
+      messages: [],
+      chats: chats,
+    }));
+  },
+
+  clearChat: (chat) => {
+    clearChat(chat.id);
+    return set((_) => ({
+      currentChat: null,
+      messages: [],
     }));
   },
   setMessages: (messages) => set({ messages }),

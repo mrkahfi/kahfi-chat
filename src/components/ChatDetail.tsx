@@ -5,7 +5,7 @@ import { MessageInput } from './chat/MessageInput';
 import { EmptyState } from './chat/EmptyState';
 import { useEffect } from 'react';
 import { format } from 'date-fns';
-import { clearChat, deleteChat, getMessages } from '../data/chatDatabase';
+import { getMessages } from '../data/chatDatabase';
 import { useChatStore } from '../stores/chatStore';
 
 interface ChatDetailProps {
@@ -14,11 +14,18 @@ interface ChatDetailProps {
 }
 
 export function ChatDetail({ chat, onBack }: ChatDetailProps) {
-  const { messages, setMessages, sendMessage } = useChatStore();
+  const {
+    messages,
+    setMessages,
+    sendMessage,
+    deleteChat,
+    clearChat,
+    currentChat,
+  } = useChatStore();
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!chat?.id) return;
+      if (!chat.id) return;
 
       try {
         const [fetchedMessages] = await Promise.all([getMessages(chat.id)]);
@@ -56,15 +63,21 @@ export function ChatDetail({ chat, onBack }: ChatDetailProps) {
 
   const handleClear = () => {
     if (chat) {
-      clearChat(chat.id);
+      clearChat(chat);
     }
   };
 
   const handleDelete = () => {
     if (chat) {
-      deleteChat(chat.id);
+      deleteChat(chat);
     }
   };
+
+  useEffect(() => {
+    if ((!currentChat || currentChat.id !== chat.id) && onBack) {
+      onBack();
+    }
+  }, [currentChat]);
 
   if (!chat) {
     return <EmptyState />;
