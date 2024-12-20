@@ -62,7 +62,7 @@ export function ChatDetail({ chat, onBack }: ChatDetailProps) {
         chatId: chat.id,
       };
       sendMessage(chat.id, serverResponse);
-    }, 2000);
+    }, 1000);
   };
 
   const handleClear = () => {
