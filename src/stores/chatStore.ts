@@ -19,7 +19,7 @@ interface ChatStore {
   clearChat: (chat: Chat) => void;
   deleteChat: (chat: Chat) => Promise<void>;
   setMessages: (messages: Message[]) => void;
-  setCurrentChat: (chatId: string) => Promise<void>;
+  setCurrentChat: (chatId?: string | null) => Promise<void>;
   sendMessage: (chatId: string, message: Message) => Promise<void>;
 }
 

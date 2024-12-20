@@ -1,13 +1,13 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { ChatDetail } from '../components/ChatDetail';
-import { useEffect, useState } from 'react';
-import { Chat } from '../types/chat';
+import { useEffect } from 'react';
 import { getChatById } from '../data/chatDatabase';
+import { useChatStore } from '../stores/chatStore';
 
 function ChatDetailPage() {
   const navigate = useNavigate();
   const { chatId } = useParams<{ chatId: string }>();
-  const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
+  const { currentChat, setCurrentChat } = useChatStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -17,7 +17,7 @@ function ChatDetailPage() {
         const [fetchedChat] = await Promise.all([getChatById(chatId)]);
 
         if (fetchedChat) {
-          setSelectedChat(fetchedChat);
+          setCurrentChat(fetchedChat.id);
         }
       } catch (error) {
         console.error('Error fetching chat data:', error);
@@ -27,11 +27,19 @@ function ChatDetailPage() {
     fetchData();
   }, [chatId]);
 
+  useEffect(() => {
+    if (currentChat === null) {
+      navigate('/');
+      return;
+    }
+  }, [currentChat]);
+
   const handleBack = () => {
+    setCurrentChat(null);
     navigate('/');
   };
 
-  if (selectedChat === null)
+  if (currentChat === null)
     return (
       <div className="flex justify-center items-center h-screen">
         <p>Chat not found</p>
@@ -39,7 +47,7 @@ function ChatDetailPage() {
     );
   return (
     <div className="h-full">
-      <ChatDetail chat={selectedChat} onBack={handleBack} />
+      <ChatDetail chat={currentChat} onBack={handleBack} />
     </div>
   );
 }

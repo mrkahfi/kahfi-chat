@@ -7,18 +7,17 @@ import { useEffect } from 'react';
 
 function ChatListPage() {
   const navigate = useNavigate();
-  const { chatId } = useParams();
   const isMobile = useIsMobile();
   const { currentChat } = useChatStore();
-
-  console.log('chatListPage ', chatId);
 
   const handleChatSelect = (selectedChatId: string) => {
     navigate(`/chat/${selectedChatId}`);
   };
 
+  console.log(currentChat?.id);
+
   useEffect(() => {
-    if (currentChat && currentChat.id !== chatId) {
+    if (currentChat) {
       navigate(`/chat/${currentChat.id}`);
     }
   }, [currentChat]);
@@ -26,14 +25,17 @@ function ChatListPage() {
   if (isMobile) {
     return (
       <div className="h-full bg-white">
-        <ChatList selectedChatId={chatId} onChatSelect={handleChatSelect} />
+        <ChatList
+          selectedChatId={currentChat?.id}
+          onChatSelect={handleChatSelect}
+        />
       </div>
     );
   }
 
   return (
     <>
-      {!chatId && <EmptyState />}
+      {!currentChat?.id && <EmptyState />}
       <Outlet />
     </>
   );

@@ -25,8 +25,6 @@ export function ChatList({ onChatSelect }: ChatListProps) {
     }
   };
 
-  console.log('chatlists');
-
   const handleNewChat = async (name: string, image: File) => {
     addChat(name, image);
   };

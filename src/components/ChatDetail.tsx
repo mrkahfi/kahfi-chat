@@ -3,10 +3,11 @@ import { ChatHeader } from './chat/ChatHeader';
 import { MessageList } from './chat/MessageList';
 import { MessageInput } from './chat/MessageInput';
 import { EmptyState } from './chat/EmptyState';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { getMessages } from '../data/chatDatabase';
 import { useChatStore } from '../stores/chatStore';
+import { ConfirmDialog } from './ConfirmDialog';
 
 interface ChatDetailProps {
   chat: Chat;
@@ -22,6 +23,9 @@ export function ChatDetail({ chat, onBack }: ChatDetailProps) {
     clearChat,
     currentChat,
   } = useChatStore();
+
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,8 +73,14 @@ export function ChatDetail({ chat, onBack }: ChatDetailProps) {
 
   const handleDelete = () => {
     if (chat) {
-      deleteChat(chat);
+      setIsConfirmDialogOpen(true);
     }
+  };
+
+  const handleConfirmDelete = () => {
+    setIsConfirmDialogOpen(false);
+
+    deleteChat(chat);
   };
 
   useEffect(() => {
@@ -98,6 +108,14 @@ export function ChatDetail({ chat, onBack }: ChatDetailProps) {
         }))}
       />
       <MessageInput onSendMessage={handleSendMessage} />
+      <ConfirmDialog
+        onSave={handleConfirmDelete}
+        onClose={() => setIsConfirmDialogOpen(false)}
+        isOpen={isConfirmDialogOpen}
+        title="Konfirmasi"
+      >
+        <div className="text-sm mb-2">Yakin akan menghapus </div>
+      </ConfirmDialog>
     </div>
   );
 }
