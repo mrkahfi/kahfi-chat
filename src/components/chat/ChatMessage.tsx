@@ -11,10 +11,10 @@ export function ChatMessage({ message }: ChatMessageProps) {
       className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
     >
       <div
-        className={`max-w-[70%] p-3 rounded-lg ${
+        className={`max-w-[70%] p-3 ${
           message.sender === 'user'
-            ? 'bg-blue-600 text-white'
-            : 'bg-white text-gray-800'
+            ? 'bg-blue-600 text-white rounded-tl-xl rounded-tr-xl rounded-bl-xl'
+            : 'bg-white text-gray-800 rounded-tl-xl rounded-tr-xl rounded-br-xl'
         }`}
       >
         <p>{message.content}</p>
