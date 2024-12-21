@@ -1,12 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { PlusIcon } from '@heroicons/react/24/solid';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { NewChatDialog } from './NewChatDialog';
 import { ChatItem } from './chat/ChatItem';
 
 import { useChatStore } from '../stores/chatStore';
 import NoChats from './NoChats';
-import { addMessage } from '../data/chatDatabase';
 
 interface ChatListProps {
   selectedChatId?: string | null;
