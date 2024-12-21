@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { PlusIcon } from '@heroicons/react/24/solid';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NewChatDialog } from './NewChatDialog';
 import { ChatItem } from './chat/ChatItem';
 
 import { useChatStore } from '../stores/chatStore';
 import NoChats from './NoChats';
+import { addMessage } from '../data/chatDatabase';
 
 interface ChatListProps {
   selectedChatId?: string | null;
@@ -29,16 +30,6 @@ export function ChatList({ onChatSelect }: ChatListProps) {
   const handleNewChat = async (name: string, image: File) => {
     addChat(name, image);
   };
-
-  //   <div className="text-center py-12 m-5">
-  //   <h2 className="text-md mb-4">You have no chats yet.</h2>
-  //   <button
-  //     className="w-full inline-flex justify-center rounded-xl border border-transparent shadow-sm px-4 py-2 bg-blue-500 hover:bg-blue-600 transition-colors text-base text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-  //     onClick={() => setIsNewChatModalOpen(true)}
-  //   >
-  //     Start a new chat
-  //   </button>
-  // </div>
 
   return (
     <div className="h-full relative">

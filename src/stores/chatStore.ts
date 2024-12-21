@@ -37,6 +37,17 @@ export const useChatStore = create<ChatStore>((set) => ({
     };
 
     await dbAddChat(newChat);
+
+    const message: Message = {
+      id: Date.now().toString(),
+      chatId: newChat.id,
+      content: 'Hello there! You joined the chat',
+      timestamp: new Date(),
+      sender: 'other',
+    };
+
+    addMessage(newChat.id, message);
+
     return set((state) => ({
       chats: [...state.chats, newChat],
       currentChat: newChat,
