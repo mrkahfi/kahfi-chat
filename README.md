@@ -10,6 +10,10 @@
 
 This project is a modern, responsive chat application built with React and TypeScript. It leverages the power of Vite for fast development and building, Zustand for efficient state management, and Tailwind CSS for sleek, utility-first styling.
 
+## 🌐 Live Preview
+
+Check out the live demo of the application: [Kataloku Chat](http://kataloku.web.app/)
+
 ## ✨ Features
 
 - 💬 Real-time chat functionality
