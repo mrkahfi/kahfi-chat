@@ -3,7 +3,7 @@ import { useIsMobile } from '../hooks/useIsMobile';
 import MobileLayout from '../layouts/MobileLayout';
 import ChatListPage from '../pages/ChatListPage';
 import ChatDetailPage from '../pages/ChatDetailPage';
-import ChatLayout from '../layouts/ChatLayout';
+import DesktopLayout from '../layouts/DesktopLayout';
 
 export function AppRoutes() {
   const isMobile = useIsMobile();
@@ -22,7 +22,7 @@ export function AppRoutes() {
   } else {
     return (
       <Routes>
-        <Route element={<ChatLayout />}>
+        <Route element={<DesktopLayout />}>
           <Route index element={<Navigate to="/chat" replace />} />
           <Route path="/chat" element={<ChatListPage />}>
             <Route path=":chatId" element={<ChatDetailPage />} />
