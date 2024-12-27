@@ -18,8 +18,6 @@ export const ChatItem: React.FC<ChatItemProps> = ({
 
   if (!chat) return null;
 
-  console.log('chatItem ', chat.id);
-
   return (
     <button
       onClick={onClick}

@@ -1,17 +1,27 @@
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { Chat } from '../types/chat';
+import { getImage } from '../data/chatDatabase';
 
-interface NewChatDialogProps {
+interface ChatFormDialogProps {
   isOpen: boolean;
+  chat?: Chat | null;
   onClose: () => void;
   onSave: (name: string, image: File) => void;
 }
 
-export function NewChatDialog({ isOpen, onClose, onSave }: NewChatDialogProps) {
-  const [name, setName] = useState('');
-  const [image, setImage] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>('');
+export function ChatFormDialog({
+  isOpen,
+  chat,
+  onClose,
+  onSave,
+}: ChatFormDialogProps) {
+  const [name, setName] = useState(chat?.name ?? '');
+  const [image, setImage] = useState<File | null>();
+  const [previewUrl, setPreviewUrl] = useState<string | undefined>(
+    chat?.avatar
+  );
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
@@ -30,6 +40,20 @@ export function NewChatDialog({ isOpen, onClose, onSave }: NewChatDialogProps) {
       onClose();
     }
   };
+
+  useEffect(() => {
+    const loadAvatar = async () => {
+      if (chat?.avatar) {
+        const blob = await getImage(chat?.avatar);
+        if (blob) {
+          setImage(new File([blob], chat?.avatar, { type: blob.type }));
+          setPreviewUrl(URL.createObjectURL(blob));
+        }
+      }
+    };
+
+    loadAvatar();
+  }, [chat?.avatar]);
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
@@ -85,7 +109,7 @@ export function NewChatDialog({ isOpen, onClose, onSave }: NewChatDialogProps) {
               <div className="mt-2">
                 <img
                   src={previewUrl}
-                  alt="Preview"
+                  alt={chat?.name}
                   className="w-32 h-32 object-cover rounded-full"
                 />
               </div>

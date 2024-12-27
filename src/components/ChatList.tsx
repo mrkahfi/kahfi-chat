@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
-import { NewChatDialog } from './NewChatDialog';
+import { ChatFormDialog } from './ChatFormDialog';
 import { ChatItem } from './chat/ChatItem';
 
 import { useChatStore } from '../stores/chatStore';
@@ -15,7 +15,7 @@ interface ChatListProps {
 export function ChatList({ onChatSelect }: ChatListProps) {
   const navigate = useNavigate();
   const { chats, addChat, setCurrentChat } = useChatStore();
-  const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
+  const [isChatFormModalOpen, setIsNewChatModalOpen] = useState(false);
 
   const handleChatClick = (chatId: string) => {
     setCurrentChat(chatId);
@@ -61,8 +61,8 @@ export function ChatList({ onChatSelect }: ChatListProps) {
         ''
       )}
 
-      <NewChatDialog
-        isOpen={isNewChatModalOpen}
+      <ChatFormDialog
+        isOpen={isChatFormModalOpen}
         onClose={() => setIsNewChatModalOpen(false)}
         onSave={handleNewChat}
       />

@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import { getMessages } from '../data/chatDatabase';
 import { useChatStore } from '../stores/chatStore';
 import { ConfirmDialog } from './ConfirmDialog';
+import { ChatFormDialog } from './ChatFormDialog';
 
 interface ChatDetailProps {
   chat: Chat;
@@ -22,9 +23,13 @@ export function ChatDetail({ chat, onBack }: ChatDetailProps) {
     deleteChat,
     clearChat,
     currentChat,
+    updateChat,
   } = useChatStore();
 
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] =
+    useState<boolean>(false);
+
+  const [isChatFormDialogOpen, setIsChatFormDialogOpen] =
     useState<boolean>(false);
 
   useEffect(() => {
@@ -77,10 +82,18 @@ export function ChatDetail({ chat, onBack }: ChatDetailProps) {
     }
   };
 
+  const handleEdit = () => {
+    setIsChatFormDialogOpen(true);
+  };
+
   const handleConfirmDelete = () => {
     setIsConfirmDialogOpen(false);
 
     deleteChat(chat);
+  };
+
+  const handleSave = async (name: string, image: File) => {
+    updateChat({ name: name, image: image, id: currentChat?.id });
   };
 
   useEffect(() => {
@@ -98,6 +111,7 @@ export function ChatDetail({ chat, onBack }: ChatDetailProps) {
       <ChatHeader
         chat={chat}
         onBack={onBack}
+        onClickEdit={handleEdit}
         onClear={handleClear}
         onDelete={handleDelete}
       />
@@ -116,6 +130,13 @@ export function ChatDetail({ chat, onBack }: ChatDetailProps) {
       >
         <div className="text-sm mb-2">Yakin akan menghapus </div>
       </ConfirmDialog>
+
+      <ChatFormDialog
+        chat={currentChat}
+        isOpen={isChatFormDialogOpen}
+        onClose={() => setIsChatFormDialogOpen(false)}
+        onSave={handleSave}
+      />
     </div>
   );
 }

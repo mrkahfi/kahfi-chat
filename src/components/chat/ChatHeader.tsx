@@ -1,4 +1,4 @@
-import { ArrowLeft, MoreVertical, Trash2, Eraser } from 'lucide-react';
+import { ArrowLeft, MoreVertical, Trash2, Eraser, Pencil } from 'lucide-react';
 import { Chat } from '../../types/chat';
 import { useIsMobile } from '../../hooks/useIsMobile';
 
@@ -9,12 +9,14 @@ import { getImage } from '../../data/chatDatabase';
 interface ChatHeaderProps {
   chat: Chat;
   onBack: () => void;
+  onClickEdit: () => void;
   onClear: () => void;
   onDelete: () => void;
 }
 
 export function ChatHeader({
   chat,
+  onClickEdit,
   onBack,
   onClear,
   onDelete,
@@ -24,6 +26,7 @@ export function ChatHeader({
   const [avatar, setAvatar] = useState<string | undefined>(chat.avatar);
 
   useEffect(() => {
+    console.log('useEffect');
     const loadAvatar = async () => {
       if (chat.avatar) {
         const blob = await getImage(chat.avatar);
@@ -34,7 +37,7 @@ export function ChatHeader({
     };
 
     loadAvatar();
-  }, [chat.avatar]);
+  }, [chat]);
 
   return (
     <div className="p-4 bg-gray-50 border-b flex items-center justify-between">
@@ -55,15 +58,21 @@ export function ChatHeader({
         <h2 className="text-lg font-semibold">{chat.name}</h2>
       </div>
 
-      <DropdownMenu onClear={onClear} onDelete={onDelete} />
+      <DropdownMenu
+        onClickEdit={onClickEdit}
+        onClear={onClear}
+        onDelete={onDelete}
+      />
     </div>
   );
 }
 
 function DropdownMenu({
+  onClickEdit,
   onClear,
   onDelete,
 }: {
+  onClickEdit: () => void;
   onClear: () => void;
   onDelete: () => void;
 }) {
@@ -73,6 +82,17 @@ function DropdownMenu({
         <MoreVertical className="w-6 h-6" />
       </MenuButton>
       <MenuItems className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+        <MenuItem>
+          {({ focus }) => (
+            <button
+              className={`${focus ? 'bg-gray-100' : ''} flex items-center px-4 py-2 tet-sm text-gray-700 w-full`}
+              onClick={onClickEdit}
+            >
+              <Pencil className="w-4 h-4 mr-2" />
+              Edit
+            </button>
+          )}
+        </MenuItem>
         <MenuItem>
           {({ focus }) => (
             <button
@@ -87,10 +107,10 @@ function DropdownMenu({
           )}
         </MenuItem>
         <MenuItem>
-          {({ active }) => (
+          {({ focus }) => (
             <button
               className={`${
-                active ? 'bg-gray-100' : ''
+                focus ? 'bg-gray-100' : ''
               } flex items-center px-4 py-2 text-sm text-gray-700 w-full`}
               onClick={onDelete}
             >

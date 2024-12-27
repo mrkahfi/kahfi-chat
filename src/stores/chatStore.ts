@@ -4,6 +4,7 @@ import {
   addMessage,
   clearChat,
   addChat as dbAddChat,
+  updateChat as dbUpdateChat,
   deleteChat,
   getChats,
   saveImage,
@@ -15,7 +16,17 @@ interface ChatStore {
   messages: Message[];
   currentChat: Chat | null;
   setChats: (chats: Chat[]) => void;
-  updateChat: (updatedChat: Chat) => void;
+  updateChat: ({
+    name,
+    image,
+    id,
+    lastMessage,
+  }: {
+    name?: string | undefined;
+    image?: File | undefined;
+    id?: string | undefined;
+    lastMessage?: string | undefined;
+  }) => Promise<void>;
   clearChat: (chat: Chat) => Promise<void>;
   deleteChat: (chat: Chat) => Promise<void>;
   setMessages: (messages: Message[]) => void;
@@ -57,13 +68,34 @@ export const useChatStore = create<ChatStore>((set) => ({
   messages: [],
   currentChat: null,
   setChats: (chats) => set({ chats }),
-  updateChat: (updatedChat) => {
-    return set((state) => ({
-      currentChat:
-        state.currentChat?.id === updatedChat.id
-          ? updatedChat
-          : state.currentChat,
-    }));
+  updateChat: async ({ name, image, id, lastMessage }) => {
+    if (image) {
+      const imageBlob = new Blob([image], { type: image.type });
+      await saveImage(id!, imageBlob);
+    }
+
+    set((state) => {
+      const chat = state.chats.find((c) => c.id === id);
+
+      if (!chat) return {};
+
+      const updatedChat: Chat = {
+        id: id ?? chat.id,
+        name: name ?? chat.name,
+        avatar: id ?? chat.id,
+        timestamp: new Date(),
+        lastMessage: lastMessage ?? chat.lastMessage,
+      };
+
+      dbUpdateChat(updatedChat);
+
+      return {
+        currentChat: updatedChat,
+        chats: state.chats.map((chat) =>
+          chat.id === updatedChat.id ? updatedChat : chat
+        ),
+      };
+    });
   },
   deleteChat: async (chat) => {
     deleteChat(chat.id);
@@ -83,9 +115,6 @@ export const useChatStore = create<ChatStore>((set) => ({
 
       if (updatedChat) {
         updatedChat.lastMessage = '';
-        if (state.currentChat?.id === chat.id) {
-          state.updateChat(updatedChat);
-        }
       }
       return {
         messages: [],
@@ -107,7 +136,7 @@ export const useChatStore = create<ChatStore>((set) => ({
       if (updatedChat) {
         updatedChat.lastMessage = message.content;
         if (state.currentChat?.id === chatId) {
-          state.updateChat(updatedChat);
+          state.updateChat({ lastMessage: message.content });
         }
       }
       return {

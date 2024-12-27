@@ -14,8 +14,6 @@ function ChatListPage() {
     navigate(`/chat/${selectedChatId}`);
   };
 
-  console.log(currentChat?.id);
-
   useEffect(() => {
     if (currentChat) {
       navigate(`/chat/${currentChat.id}`);

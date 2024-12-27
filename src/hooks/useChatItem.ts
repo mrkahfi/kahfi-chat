@@ -21,7 +21,7 @@ export const useChatItem = (chatId: string) => {
     };
 
     loadAvatar();
-  }, [chat?.avatar]);
+  }, [chat]);
 
   return {
     chat,
