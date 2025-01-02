@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { useState } from 'react';
 import { ChatFormDialog } from './ChatFormDialog';
-import { ChatItem } from './chat/ChatItem';
+import ChatItemLoading, { ChatItem } from './chat/ChatItem';
 
 import { useChatStore } from '../stores/chatStore';
 import NoChats from './NoChats';
@@ -14,7 +14,7 @@ interface ChatListProps {
 
 export function ChatList({ onChatSelect }: ChatListProps) {
   const navigate = useNavigate();
-  const { chats, addChat, setCurrentChat } = useChatStore();
+  const { chats, addChat, setCurrentChat, isLoadingChats } = useChatStore();
   const [isChatFormModalOpen, setIsNewChatModalOpen] = useState(false);
 
   const handleChatClick = (chatId: string) => {
@@ -36,18 +36,20 @@ export function ChatList({ onChatSelect }: ChatListProps) {
         <h1 className="text-2xl font-bold text-gray-800">Chats</h1>
       </div>
       <div className="overflow-y-auto">
-        {chats.length === 0 ? (
-          <NoChats onClick={() => setIsNewChatModalOpen(true)} />
-        ) : (
-          chats.map((chat) => (
-            <ChatItem
-              key={chat.id}
-              chatId={chat.id}
-              isSelected={false}
-              onClick={() => handleChatClick(chat.id)}
-            />
-          ))
-        )}
+      {isLoadingChats ? (
+        <ChatItemLoading />
+      ) : chats.length === 0 ? (
+        <NoChats onClick={() => setIsNewChatModalOpen(true)} />
+      ) : (
+        chats.map((chat) => (
+          <ChatItem
+            key={chat.id}
+            chatId={chat.id}
+            isSelected={false}
+            onClick={() => handleChatClick(chat.id)}
+          />
+        ))
+      )}
       </div>
 
       {chats.length > 0 ? (

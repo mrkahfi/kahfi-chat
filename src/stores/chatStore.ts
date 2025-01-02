@@ -12,10 +12,12 @@ import {
 
 interface ChatStore {
   addChat: (name: string, image: File) => void;
+  isLoadingChats: boolean;
   chats: Chat[];
   messages: Message[];
   currentChat: Chat | null;
-  setChats: (chats: Chat[]) => void;
+  setIsLoadingChats: (isLoading: boolean) => void;
+  setChats: () => Promise<void>;
   updateChat: ({
     name,
     image,
@@ -64,10 +66,20 @@ export const useChatStore = create<ChatStore>((set) => ({
       currentChat: newChat,
     }));
   },
+  isLoadingChats: true,
   chats: [],
   messages: [],
   currentChat: null,
-  setChats: (chats) => set({ chats }),
+  setIsLoadingChats: (isLoading) => set({ isLoadingChats: isLoading }),
+  setChats: async () => {
+    const chats = await getChats();
+    setTimeout(() => {
+      set((state)=> {
+        state.setIsLoadingChats(false);
+        return { chats };
+      });
+    }, 1000);
+  },
   updateChat: async ({ name, image, id, lastMessage }) => {
     if (image) {
       const imageBlob = new Blob([image], { type: image.type });

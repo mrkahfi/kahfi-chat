@@ -46,3 +46,21 @@ export const ChatItem: React.FC<ChatItemProps> = ({
     </button>
   );
 };
+
+
+const ChatItemLoading = () => {
+  return (
+    <div className="w-full p-4 flex items-center space-x-4 border-b animate-pulse">
+      <div className="w-12 h-12 bg-gray-300 rounded-full"></div>
+      <div className="flex-1 min-w-0 ">
+        <div className="flex justify-between items-baseline mb-1">
+          <div className="h-4 bg-gray-300 w-24 rounded"></div>
+          <div className="h-3 bg-gray-300 w-12 rounded"></div>
+        </div>
+        <div className="h-3 bg-gray-300 w-48 rounded"></div>
+      </div>
+    </div>
+  );
+};
+
+export default ChatItemLoading;

@@ -22,12 +22,11 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  const setChats = useChatStore((state) => state.setChats);
+  const { setChats } = useChatStore();
 
   useEffect(() => {
     const initializeChats = async () => {
-      const fetchedChats = await getChats();
-      setChats(fetchedChats);
+      setChats();
     };
 
     initializeDatabase();
