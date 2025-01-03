@@ -1,6 +1,5 @@
-import { BrowserRouter, RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { AppRoutes } from './routes/AppRoutes';
-import { getChats, initializeDatabase } from './data/chatDatabase';
 import { useEffect } from 'react';
 import { useChatStore } from './stores/chatStore';
 

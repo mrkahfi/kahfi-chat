@@ -26,7 +26,6 @@ export function ChatHeader({
   const [avatar, setAvatar] = useState<string | undefined>(chat.avatar);
 
   useEffect(() => {
-    console.log('useEffect');
     const loadAvatar = async () => {
       if (chat.avatar) {
         const blob = await getImage(chat.avatar);

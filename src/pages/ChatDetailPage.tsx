@@ -29,14 +29,14 @@ function ChatDetailPage() {
 
   useEffect(() => {
     if (currentChat === null) {
-      navigate('/');
+      navigate('/chat');
       return;
     }
   }, [currentChat]);
 
   const handleBack = () => {
     setCurrentChat(null);
-    navigate('/');
+    navigate('/chat');
   };
 
   if (currentChat === null)

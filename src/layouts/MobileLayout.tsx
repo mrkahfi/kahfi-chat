@@ -7,7 +7,9 @@ interface MobileLayoutProps {
 
 function MobileLayout({ children }: MobileLayoutProps) {
   const location = useLocation();
-  const isDetail = location.pathname.includes('/chat');
+  const isDetail = location.pathname.includes('/chat/');
+
+  console.log('isDetail ', isDetail);
 
   return (
     <div className="h-screen w-screen relative overflow-hidden bg-white">
