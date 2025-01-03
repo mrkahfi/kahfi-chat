@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useChatStore } from './stores/chatStore';
 
 import { createBrowserRouter } from 'react-router-dom';
+import { initializeDatabase } from './data/chatDatabase';
 
 const router = createBrowserRouter(
   [
