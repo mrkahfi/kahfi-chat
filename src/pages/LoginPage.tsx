@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 // import jwt_decode from 'jwt-decode';
-import FacebookLogin from 'react-facebook-login';
+import FacebookLogin, { ReactFacebookLoginInfo } from 'react-facebook-login';
 import '../Login.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -31,7 +31,7 @@ const LoginPage = () => {
     console.log('Google login error');
   };
 
-  const responseFacebook = (response: any) => {
+  const responseFacebook = (response: ReactFacebookLoginInfo) => {
     // Handle Facebook login response
     console.log(response);
   };
@@ -65,15 +65,16 @@ const LoginPage = () => {
           <GoogleLogin
             onSuccess={(credentialResponse) => {
               console.log(credentialResponse);
+              responseGoogle();
             }}
             onError={() => {
               console.log('Login Failed');
             }}
           />
-          ;
+          \
           <FacebookLogin
-            buttonStyle={{ padding: '6px' }}
-            appId="946726573608245" // we need to get this from facebook developer console by setting the app.
+            buttonStyle={{ padding: '6px', color: 'blue' }}
+            appId="946726573608245"
             autoLoad={false}
             fields="name,email,picture"
             callback={responseFacebook}
