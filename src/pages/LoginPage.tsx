@@ -71,7 +71,7 @@ const LoginPage = () => {
               console.log('Login Failed');
             }}
           />
-          \
+          
           <FacebookLogin
             buttonStyle={{ padding: '6px', color: 'blue' }}
             appId="946726573608245"
