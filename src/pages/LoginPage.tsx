@@ -4,11 +4,15 @@ import { GoogleLogin } from '@react-oauth/google';
 import FacebookLogin, { ReactFacebookLoginInfo } from 'react-facebook-login';
 import '../Login.css';
 import { useNavigate } from 'react-router-dom';
+import { mockAuthenticate } from '../mocks/mockAuth';
+import { useAuth } from '../hooks/useAuth';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
+  const { login } = useAuth();
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -18,21 +22,25 @@ const LoginPage = () => {
     setPassword(event.target.value);
   };
 
-  const handleLogin = () => {
-    // Handle username/password login logic here
-    console.log('Username:', username);
-    console.log('Password:', password);
+  const handleLogin = async () => {
+    mockAuthenticate({ username: 'testuser', password: 'password123' })
+      .then((jwt) => {
+        console.log('Received JWT:', jwt);
+        document.cookie = `jwt=${jwt}; Secure; HttpOnly; SameSite=Strict; path=/`;
+        login({ username: username, role: 'customer' });
+      })
+      .catch((error) => {
+        console.error('Authentication failed:', error);
+      });
 
     navigate('/chat');
   };
 
   const responseGoogle = () => {
-    // Handle Google login response
     console.log('Google login error');
   };
 
   const responseFacebook = (response: ReactFacebookLoginInfo) => {
-    // Handle Facebook login response
     console.log(response);
   };
 
@@ -71,7 +79,7 @@ const LoginPage = () => {
               console.log('Login Failed');
             }}
           />
-          
+
           <FacebookLogin
             buttonStyle={{ padding: '6px', color: 'blue' }}
             appId="946726573608245"
